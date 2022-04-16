@@ -27,17 +27,16 @@ RUN   apk add --no-cache tini /
 # - then it should use alpine package manager to install tini: 'apk add --no-cache tini'
 && mkdir -p /usr/src/app
 # - then it should create directory /usr/src/app for app files with 'mkdir -p /usr/src/app'
-COPY package.json /usr/src/app
+COPY package.json package.json
 # - Node uses a "package manager", so it needs to copy in package.json file
 WORKDIR /usr/src/app
 
-RUN npm install / 
-&& npm cache clean --force
+RUN npm install && npm cache clean --force
 # - then it needs to run 'npm install' to install dependencies from that file
 # - to keep it clean and small, run 'npm cache clean --force' after above
-COPY 
+COPY . .
 # - then it needs to copy in all files from current directory
-CMD /sbin/tini -- node ./bin/www
+CMD [ "/sbin/tini", "--", "node", "./bin/www" ]
 # - then it needs to start container with command '/sbin/tini -- node ./bin/www'
 # - in the end you should be using FROM, RUN, WORKDIR, COPY, EXPOSE, and CMD commands
 
@@ -49,3 +48,4 @@ CMD /sbin/tini -- node ./bin/www
 # Node Docker Good Defaults sample project on GitHub to change this Dockerfile for 
 # better local development with more advanced topics
 # https://github.com/BretFisher/node-docker-good-defaults
+
